@@ -1,0 +1,50 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class DatePickerAutomation {
+    public static void main(String[] args) {
+        // Set the path to chromedriver if not set in system PATH
+        // System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
+
+        // Launch Chrome browser
+        WebDriver driver = new ChromeDriver();
+
+        try {
+            // Maximize the browser window
+            driver.manage().window().maximize();
+
+            // Navigate to the datepicker URL
+            driver.get("https://jqueryui.com/datepicker/");
+
+            // Switch to the iframe containing the datepicker
+            WebElement iframe = driver.findElement(By.cssSelector(".demo-frame"));
+            driver.switchTo().frame(iframe);
+
+            // Open the datepicker by clicking the input field
+            WebElement dateInput = driver.findElement(By.id("datepicker"));
+            dateInput.click();
+
+            // Click on the "Next" button to move to the next month
+            WebElement nextButton = driver.findElement(By.cssSelector(".ui-datepicker-next"));
+            nextButton.click();
+
+            // Wait briefly to allow calendar to update (optional)
+            Thread.sleep(1000);
+
+            // Select the date "22"
+            WebElement date22 = driver.findElement(By.xpath("//a[text()='22']"));
+            date22.click();
+
+            // Get the selected date from the input field
+            String selectedDate = dateInput.getAttribute("value");
+            System.out.println("Selected Date: " + selectedDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Close the browser and quit the WebDriver
+            driver.quit();
+        }
+    }
+}
