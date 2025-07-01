@@ -1,0 +1,44 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+
+public class DragAndDropTest {
+    public static void main(String[] args) {
+        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver"); // Update path
+
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+
+        try {
+            driver.get("https://jqueryui.com/droppable/");
+            driver.switchTo().frame(driver.findElement(By.cssSelector(".demo-frame")));
+
+            WebElement source = driver.findElement(By.id("draggable"));
+            WebElement target = driver.findElement(By.id("droppable"));
+
+            Actions actions = new Actions(driver);
+            actions.dragAndDrop(source, target).perform();
+
+            Thread.sleep(1000); // Simple wait for changes to appear
+
+            String backgroundColor = target.getCssValue("background-color");
+            String targetText = target.getText();
+
+            System.out.println("Background color: " + backgroundColor);
+            System.out.println("Text: " + targetText);
+
+            if (targetText.equals("Dropped!") && !backgroundColor.isEmpty()) {
+                System.out.println("✅ Drag and drop successful.");
+            } else {
+                System.out.println("❌ Drag and drop failed.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.quit();
+        }
+    }
+}
